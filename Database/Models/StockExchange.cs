@@ -22,6 +22,7 @@ namespace Stocker.Database.Models
             builder.Property(se => se.Name);
             builder.Property(se => se.Country);
             builder.HasOne(se => se.Currency).WithMany().HasForeignKey(se => se.CurrencyId);
+            builder.HasIndex(se => se.Name).IsUnique();
         }
     }
 }
