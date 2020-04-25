@@ -9,6 +9,7 @@ namespace Stocker.Database.Models
         public string Name { get; set; }
         public string Code { get; set; }
         public string Symbol { get; set; }
+        public decimal MinorToMajorMultiplier { get; set; }
     }
 
     public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
@@ -21,6 +22,7 @@ namespace Stocker.Database.Models
             builder.Property(c => c.Name);
             builder.Property(c => c.Code);
             builder.Property(c => c.Symbol);
+            builder.Property(c => c.MinorToMajorMultiplier);
         }
     }
 }

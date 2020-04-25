@@ -4,6 +4,6 @@ namespace Stocker.Models.Api
     {
         public string Code { get; set; }
         public string Symbol { get; set; }
-        public decimal MinorToMajorValueMultiplier { get; set; }
+        public decimal MinorToMajorMultiplier { get; set; }
     }
 }
