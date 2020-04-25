@@ -11,7 +11,6 @@ namespace Stocker.Database.Models
         public string Ticker { get; set; }
         public int StockExchangeId { get; set; }
         public StockExchange StockExchange { get; set; }
-        public IEnumerable<StockTransaction> Transactions { get; set; }
     }
 
     public class StockConfiguration : IEntityTypeConfiguration<Stock>
@@ -24,7 +23,6 @@ namespace Stocker.Database.Models
             builder.Property(s => s.Name);
             builder.Property(s => s.Ticker);
             builder.HasOne(s => s.StockExchange).WithMany().HasForeignKey(s => s.StockExchangeId);
-            builder.HasMany(s => s.Transactions).WithOne(st => st.Stock);
         }
     }
 }

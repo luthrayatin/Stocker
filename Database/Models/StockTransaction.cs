@@ -36,7 +36,7 @@ namespace Stocker.Database.Models
             builder.ToTable("StockTransactions");
             builder.HasKey(st => st.Id);
             builder.Property(st => st.Id).ValueGeneratedOnAdd();
-            builder.HasOne(st => st.Stock).WithMany(s => s.Transactions).HasForeignKey(st => st.StockId);
+            builder.HasOne(st => st.Stock).WithMany().HasForeignKey(st => st.StockId);
             builder.Property(st => st.Quantity).IsRequired();
             builder.OwnsOne(st => st.PricePerUnit, am =>
             {

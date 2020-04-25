@@ -9,6 +9,7 @@ using Serilog;
 using Stocker.Database;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using AutoMapper;
 
 namespace Stocker
 {
@@ -36,6 +37,7 @@ namespace Stocker
                 });
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddDbContext<StockerDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("StockerDb")));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
