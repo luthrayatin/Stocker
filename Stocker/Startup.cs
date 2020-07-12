@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +10,9 @@ using Serilog;
 using Stocker.Database;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using Autofac;
 using Mapping;
+using Stocker.Mapping;
 
 namespace Stocker
 {
@@ -35,11 +38,17 @@ namespace Stocker
                     options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
                     options.Audience = Configuration["Auth0:Audience"];
                 });
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
-            services.AddDbContext<StockerDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("StockerDb")));
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddDbContext<StockerDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("StockerDb")));
             services.AddSwaggerDocument();
-            services.AddTransient(typeof(IMap<,>));
-            services.AddTransient(typeof(IMap<,,>));
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(IMap<,>));
+            builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(IMap<,,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +69,7 @@ namespace Stocker
             app.UseRouting();
 
             app.UseAuthentication();
-            
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
