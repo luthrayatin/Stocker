@@ -8,7 +8,7 @@ namespace Stocker.Validators
         public AmountValidator()
         {
             RuleFor(a => a.ValueMinor).NotEqual(0);
-            RuleFor(a => a.Currency).SetValidator(new CurrencyValidator());
+            RuleFor(a => a.CurrencyCode).NotEmpty();
         }
     }
 }

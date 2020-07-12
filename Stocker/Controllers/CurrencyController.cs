@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
+using Mapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stocker.Database;
@@ -16,16 +16,23 @@ namespace Stocker.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private readonly StockerDbContext _dbContext;
-        private readonly IMapper _mapper;
-        public CurrencyController(ILogger<CurrencyController> logger, StockerDbContext dbContext, IMapper mapper)
+        private readonly IMap<Database.Models.Currency, Models.Api.Currency> _currencyDbToApiMapper;
+        private readonly IMap<Models.Api.AddCurrencyRequest, Database.Models.Currency> _currencyAddRequestToDbMapper;
+        public CurrencyController(ILogger<CurrencyController> logger, StockerDbContext dbContext, IMap<Database.Models.Currency, Currency> currencyDbToApiMapper, IMap<AddCurrencyRequest, Database.Models.Currency> currencyAddRequestToDbMapper)
         {
             _logger = logger;
             _dbContext = dbContext;
-            _mapper = mapper;
+            _currencyDbToApiMapper = currencyDbToApiMapper;
+            _currencyAddRequestToDbMapper = currencyAddRequestToDbMapper;
         }
 
+        /// <summary>
+        /// Get currencies based on the input filter.
+        /// </summary>
+        /// <param name="filter">Specify Code and/or Name of currencies to fetch</param>
+        /// <returns>Collection of currencies filtered by input.</returns>
         [HttpGet]
-        public IEnumerable<Currency> Get([FromRoute]GetCurrencyFilter filter)
+        public IEnumerable<Currency> Get([FromRoute] GetCurrencyFilter filter)
         {
             var resultQuery = _dbContext.Currencies.Select(c => c);
 
@@ -39,11 +46,19 @@ namespace Stocker.Controllers
                 resultQuery = resultQuery.Where(c => c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            return _mapper.Map<IEnumerable<Database.Models.Currency>, IEnumerable<Currency>>(resultQuery);
+            foreach (var currency in resultQuery)
+            {
+                yield return _currencyDbToApiMapper.Map(currency);
+            }
         }
 
+        /// <summary>
+        /// Add a new currency
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add([FromBody]AddCurrencyRequest request)
+        public async Task<IActionResult> Add([FromBody] AddCurrencyRequest request)
         {
             if (_dbContext.Currencies.Any(c => c.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase) ||
              c.Code.Equals(request.Code, StringComparison.CurrentCultureIgnoreCase)))
@@ -51,10 +66,10 @@ namespace Stocker.Controllers
                 return BadRequest("Currency already exists.");
             }
 
-            var currency = _mapper.Map<AddCurrencyRequest, Database.Models.Currency>(request);
+            var currency = _currencyAddRequestToDbMapper.Map(request);
             _dbContext.Currencies.Add(currency);
             await _dbContext.SaveChangesAsync();
-            return Ok(new { Id = currency.Id });
+            return CreatedAtAction(nameof(Get), new { Code = currency.Code }, currency);
         }
     }
 }

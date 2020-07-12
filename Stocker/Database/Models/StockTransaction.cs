@@ -24,7 +24,7 @@ namespace Stocker.Database.Models
         /// Conversion rate for converting user currency to stock currency for this transaction.
         /// </summary>
         /// <value></value>
-        public decimal ConversionRate { get; set; }
+        public decimal ConversionRateUserToStock { get; set; }
         public DateTimeOffset LoggedAt { get; set; }
         public Amount Commission { get; set; }
     }
@@ -49,7 +49,7 @@ namespace Stocker.Database.Models
             builder.Property(st => st.Date);
             builder.HasOne(st => st.User).WithMany().HasForeignKey(st => st.UserId);
             builder.HasOne(st => st.UserCurrency).WithMany().HasForeignKey(st => st.UserCurrencyId);
-            builder.Property(st => st.ConversionRate).IsRequired();
+            builder.Property(st => st.ConversionRateUserToStock).IsRequired();
             builder.Property(st => st.LoggedAt).IsRequired();
             builder.OwnsOne(st => st.Commission, am =>
             {

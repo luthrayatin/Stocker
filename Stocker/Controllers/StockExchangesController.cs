@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
+using Mapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stocker.Database;
@@ -16,18 +16,19 @@ namespace Stocker.Controllers
     {
         private readonly ILogger<StockExchangesController> _logger;
         private readonly StockerDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IMap<Database.Models.StockExchange, Models.Api.StockExchange> _stockExchangeDbToApiMapper;
+        private readonly IMap<Models.Api.AddStockExchangeRequest, Database.Models.StockExchange> _stockExchangeAddRequestToDbMapper;
         public StockExchangesController(ILogger<StockExchangesController> logger,
-        StockerDbContext dbContext,
-        IMapper mapper)
+        StockerDbContext dbContext, IMap<Database.Models.StockExchange, StockExchange> stockExchangeDbToApiMapper, IMap<AddStockExchangeRequest, Database.Models.StockExchange> stockExchangeAddRequestToDbMapper)
         {
             _logger = logger;
             _dbContext = dbContext;
-            _mapper = mapper;
+            _stockExchangeDbToApiMapper = stockExchangeDbToApiMapper;
+            _stockExchangeAddRequestToDbMapper = stockExchangeAddRequestToDbMapper;
         }
 
         [HttpGet]
-        public IEnumerable<StockExchange> Get([FromRoute]GetStockExchangesFilter filter)
+        public IEnumerable<StockExchange> Get([FromRoute] GetStockExchangesFilter filter)
         {
             var resultQuery = _dbContext.StockExchanges.Select(se => se);
 
@@ -41,11 +42,14 @@ namespace Stocker.Controllers
                 resultQuery = resultQuery.Where(se => se.Country.Equals(filter.Country, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            return _mapper.Map<IEnumerable<Database.Models.StockExchange>, IEnumerable<StockExchange>>(resultQuery);
+            foreach (var stockExchange in resultQuery)
+            {
+                yield return _stockExchangeDbToApiMapper.Map(stockExchange);   
+            }
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add([FromBody]AddStockExchangeRequest request)
+        public async Task<IActionResult> Add([FromBody] AddStockExchangeRequest request)
         {
             var stockExchangeExists = _dbContext.StockExchanges
             .Any(se => se.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase) &&
@@ -62,7 +66,7 @@ namespace Stocker.Controllers
                 return BadRequest($"The CurrencyId: {request.CurrencyId} is invalid.");
             }
 
-            var stockExchange = _mapper.Map<AddStockExchangeRequest, Database.Models.StockExchange>(request);
+            var stockExchange = _stockExchangeAddRequestToDbMapper.Map(request);
             _dbContext.StockExchanges.Add(stockExchange);
             await _dbContext.SaveChangesAsync();
             return Ok(new { Id = stockExchange.Id });

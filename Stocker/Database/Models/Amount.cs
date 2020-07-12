@@ -4,6 +4,6 @@ namespace Stocker.Database.Models
     {
         public int CurrencyId { get; set; }
         public Currency Currency { get; set; }
-        public long ValueMinor { get; set; }
+        public decimal ValueMinor { get; set; }
     }
 }
