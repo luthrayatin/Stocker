@@ -5,6 +5,7 @@ using Mapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stocker.Database;
+using Stocker.Database.Models;
 using Stocker.Models.Api;
 
 namespace Stocker.Controllers
@@ -13,16 +14,17 @@ namespace Stocker.Controllers
     [Route("stock/{stockId}/transactions")]
     public class StockTransactionsController : ControllerBase
     {
-        private readonly ILogger<StockTransactionsController> _logger;
         private readonly StockerDbContext _dbContext;
-        private readonly IMap<Database.Models.StockTransaction, Transaction> _transactionDbToApiMapper;
+        private readonly ILogger<StockTransactionsController> _logger;
 
-        private readonly IMap<AddStockTransactionRequest, Database.Models.StockTransaction>
+        private readonly IMap<AddStockTransactionRequest, StockTransaction>
             _transactionAddRequestToDbMapper;
 
+        private readonly IMap<StockTransaction, Transaction> _transactionDbToApiMapper;
+
         public StockTransactionsController(ILogger<StockTransactionsController> logger,
-            StockerDbContext dbContext, IMap<Database.Models.StockTransaction, Transaction> transactionDbToApiMapper,
-            IMap<AddStockTransactionRequest, Database.Models.StockTransaction> transactionAddRequestToDbMapper)
+            StockerDbContext dbContext, IMap<StockTransaction, Transaction> transactionDbToApiMapper,
+            IMap<AddStockTransactionRequest, StockTransaction> transactionAddRequestToDbMapper)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -32,7 +34,7 @@ namespace Stocker.Controllers
         }
 
         /// <summary>
-        /// Get all transactions for user based on the token.
+        ///     Get all transactions for user based on the token.
         /// </summary>
         /// <returns>All transactions for the user.</returns>
         [HttpGet]
@@ -42,9 +44,7 @@ namespace Stocker.Controllers
             //TODO: Get UserId from Token once Authentication is implemented.
             foreach (var stockTransaction in _dbContext.StockTransactions.Where(st => st.UserId == 1)
                 .OrderByDescending(st => st.Id))
-            {
                 yield return _transactionDbToApiMapper.Map(stockTransaction);
-            }
         }
 
         [HttpPost("[action]")]

@@ -1,11 +1,11 @@
-
 using Mapping;
+using Stocker.Database.Models;
 
 namespace Stocker.Mapping
 {
-    class AmountDbToApiMap : IMap<Database.Models.Amount, Models.Api.Amount>
+    internal class AmountDbToApiMap : IMap<Amount, Models.Api.Amount>
     {
-        public Models.Api.Amount Map(Database.Models.Amount source)
+        public Models.Api.Amount Map(Amount source)
         {
             return new Models.Api.Amount
             {
@@ -16,11 +16,11 @@ namespace Stocker.Mapping
         }
     }
 
-    class AmountApiToDbMap : IMap<Models.Api.Amount, Database.Models.Amount>
+    internal class AmountApiToDbMap : IMap<Models.Api.Amount, Amount>
     {
-        public Database.Models.Amount Map(Models.Api.Amount source)
+        public Amount Map(Models.Api.Amount source)
         {
-            return new Database.Models.Amount
+            return new Amount
             {
                 CurrencyId = source.CurrencyId,
                 ValueMinor = source.ValueMinor

@@ -7,8 +7,8 @@ namespace Stocker.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<decimal>(
-                name: "MinorToMajorMultiplier",
-                table: "Currencies",
+                "MinorToMajorMultiplier",
+                "Currencies",
                 nullable: false,
                 defaultValue: 0m);
         }
@@ -16,8 +16,8 @@ namespace Stocker.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "MinorToMajorMultiplier",
-                table: "Currencies");
+                "MinorToMajorMultiplier",
+                "Currencies");
         }
     }
 }

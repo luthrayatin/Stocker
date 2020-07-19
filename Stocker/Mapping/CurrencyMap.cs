@@ -1,10 +1,11 @@
 using Mapping;
+using Stocker.Models.Api;
 
 namespace Stocker.Mapping
 {
-    public class CurrencyApiToDbMap : IMap<Models.Api.Currency, Database.Models.Currency>
+    public class CurrencyAddRequestToDbMap : IMap<AddCurrencyRequest, Database.Models.Currency>
     {
-        public Database.Models.Currency Map(Models.Api.Currency source)
+        public Database.Models.Currency Map(AddCurrencyRequest source)
         {
             return new Database.Models.Currency
             {
@@ -16,11 +17,11 @@ namespace Stocker.Mapping
         }
     }
 
-    public class CurrencyDbToApiMap : IMap<Database.Models.Currency, Models.Api.Currency>
+    public class CurrencyDbToApiMap : IMap<Database.Models.Currency, Currency>
     {
-        public Models.Api.Currency Map(Database.Models.Currency source)
+        public Currency Map(Database.Models.Currency source)
         {
-            return new Models.Api.Currency
+            return new Currency
             {
                 Id = source.Id,
                 Code = source.Code,

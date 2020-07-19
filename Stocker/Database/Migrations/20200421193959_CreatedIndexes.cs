@@ -7,27 +7,27 @@ namespace Stocker.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "StockExchangeId",
-                table: "Stocks",
+                "StockExchangeId",
+                "Stocks",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stocks_StockExchangeId",
-                table: "Stocks",
-                column: "StockExchangeId");
+                "IX_Stocks_StockExchangeId",
+                "Stocks",
+                "StockExchangeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StockExchanges_Name",
-                table: "StockExchanges",
-                column: "Name",
+                "IX_StockExchanges_Name",
+                "StockExchanges",
+                "Name",
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Stocks_StockExchanges_StockExchangeId",
-                table: "Stocks",
-                column: "StockExchangeId",
-                principalTable: "StockExchanges",
+                "FK_Stocks_StockExchanges_StockExchangeId",
+                "Stocks",
+                "StockExchangeId",
+                "StockExchanges",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -35,20 +35,20 @@ namespace Stocker.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Stocks_StockExchanges_StockExchangeId",
-                table: "Stocks");
+                "FK_Stocks_StockExchanges_StockExchangeId",
+                "Stocks");
 
             migrationBuilder.DropIndex(
-                name: "IX_Stocks_StockExchangeId",
-                table: "Stocks");
+                "IX_Stocks_StockExchangeId",
+                "Stocks");
 
             migrationBuilder.DropIndex(
-                name: "IX_StockExchanges_Name",
-                table: "StockExchanges");
+                "IX_StockExchanges_Name",
+                "StockExchanges");
 
             migrationBuilder.DropColumn(
-                name: "StockExchangeId",
-                table: "Stocks");
+                "StockExchangeId",
+                "Stocks");
         }
     }
 }

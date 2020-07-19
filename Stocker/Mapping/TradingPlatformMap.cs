@@ -1,24 +1,27 @@
 using Mapping;
 using Stocker.Models.Api;
+using TradingPlatform = Stocker.Database.Models.TradingPlatform;
 
 namespace Stocker.Mapping
 {
-    public class TradingPlatformDbToApiMap : IMap<Database.Models.TradingPlatform, Models.Api.TradingPlatform>
+    public class TradingPlatformDbToApiMap : IMap<TradingPlatform, Models.Api.TradingPlatform>
     {
-        public Models.Api.TradingPlatform Map(Database.Models.TradingPlatform source)
+        public Models.Api.TradingPlatform Map(TradingPlatform source)
         {
             return new Models.Api.TradingPlatform
             {
+                Id = source.Id,
                 Name = source.Name
             };
         }
     }
 
-    public class TradingPlatformAddRequestToDbMap : IMap<Models.Api.AddTradingPlatformRequest, Database.Models.TradingPlatform>
+    public class
+        TradingPlatformAddRequestToDbMap : IMap<AddTradingPlatformRequest, TradingPlatform>
     {
-        public Database.Models.TradingPlatform Map(AddTradingPlatformRequest source)
+        public TradingPlatform Map(AddTradingPlatformRequest source)
         {
-            return new Database.Models.TradingPlatform
+            return new TradingPlatform
             {
                 Name = source.Name
             };

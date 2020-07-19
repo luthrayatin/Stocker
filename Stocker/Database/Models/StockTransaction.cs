@@ -20,11 +20,13 @@ namespace Stocker.Database.Models
         public User User { get; set; }
         public int UserCurrencyId { get; set; }
         public Currency UserCurrency { get; set; }
+
         /// <summary>
-        /// Conversion rate for converting user currency to stock currency for this transaction.
+        ///     Conversion rate for converting user currency to stock currency for this transaction.
         /// </summary>
         /// <value></value>
         public decimal ConversionRateUserToStock { get; set; }
+
         public DateTimeOffset LoggedAt { get; set; }
         public Amount Commission { get; set; }
     }

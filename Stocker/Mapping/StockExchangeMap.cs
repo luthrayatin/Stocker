@@ -1,12 +1,16 @@
 using Mapping;
+using Stocker.Models.Api;
+using Currency = Stocker.Database.Models.Currency;
+using StockExchange = Stocker.Database.Models.StockExchange;
 
 namespace Stocker.Mapping
 {
-    public class StockExchangeAddRequestToDbMap : IMap<Models.Api.AddStockExchangeRequest, Database.Models.StockExchange>
+    public class
+        StockExchangeAddRequestToDbMap : IMap<AddStockExchangeRequest, StockExchange>
     {
-        public Database.Models.StockExchange Map(Models.Api.AddStockExchangeRequest source)
+        public StockExchange Map(AddStockExchangeRequest source)
         {
-            return new Database.Models.StockExchange
+            return new StockExchange
             {
                 Country = source.Country,
                 CurrencyId = source.CurrencyId,
@@ -15,16 +19,16 @@ namespace Stocker.Mapping
         }
     }
 
-    public class StockExchangeDbToApiMap : IMap<Database.Models.StockExchange, Models.Api.StockExchange>
+    public class StockExchangeDbToApiMap : IMap<StockExchange, Models.Api.StockExchange>
     {
-        private readonly IMap<Database.Models.Currency, Models.Api.Currency> _currencyMapper;
+        private readonly IMap<Currency, Models.Api.Currency> _currencyMapper;
 
-        public StockExchangeDbToApiMap(IMap<Database.Models.Currency, Models.Api.Currency> currencyMapper)
+        public StockExchangeDbToApiMap(IMap<Currency, Models.Api.Currency> currencyMapper)
         {
             _currencyMapper = currencyMapper;
         }
 
-        public Models.Api.StockExchange Map(Database.Models.StockExchange source)
+        public Models.Api.StockExchange Map(StockExchange source)
         {
             return new Models.Api.StockExchange
             {

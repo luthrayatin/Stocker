@@ -6,10 +6,12 @@ namespace Stocker.Database
     public class StockerDbContext : DbContext
     {
         public StockerDbContext(DbContextOptions options) : base(options)
-        { }
+        {
+        }
 
         public StockerDbContext()
-        { }
+        {
+        }
 
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockExchange> StockExchanges { get; set; }

@@ -1,17 +1,20 @@
 using Mapping;
+using Stocker.Models.Api;
+using Stock = Stocker.Database.Models.Stock;
+using StockExchange = Stocker.Database.Models.StockExchange;
 
 namespace Stocker.Mapping
 {
-    public class StockDbToApiMap : IMap<Database.Models.Stock, Models.Api.Stock>
+    public class StockDbToApiMap : IMap<Stock, Models.Api.Stock>
     {
-        private readonly IMap<Database.Models.StockExchange, Models.Api.StockExchange> _stockExchangeMapper;
+        private readonly IMap<StockExchange, Models.Api.StockExchange> _stockExchangeMapper;
 
-        public StockDbToApiMap(IMap<Database.Models.StockExchange, Models.Api.StockExchange> stockExchangeMapper)
+        public StockDbToApiMap(IMap<StockExchange, Models.Api.StockExchange> stockExchangeMapper)
         {
             _stockExchangeMapper = stockExchangeMapper;
         }
 
-        public Models.Api.Stock Map(Database.Models.Stock source)
+        public Models.Api.Stock Map(Stock source)
         {
             return new Models.Api.Stock
             {
@@ -23,11 +26,11 @@ namespace Stocker.Mapping
         }
     }
 
-    public class StockAddRequestToDbMap : IMap<Models.Api.AddStockRequest, Database.Models.Stock>
+    public class StockAddRequestToDbMap : IMap<AddStockRequest, Stock>
     {
-        public Database.Models.Stock Map(Models.Api.AddStockRequest source)
+        public Stock Map(AddStockRequest source)
         {
-            return new Database.Models.Stock
+            return new Stock
             {
                 Name = source.Name,
                 StockExchangeId = source.StockExchangeId,

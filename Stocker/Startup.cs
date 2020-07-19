@@ -1,4 +1,7 @@
-using System.Linq;
+using System.Reflection;
+using Autofac;
+using FluentValidation.AspNetCore;
+using Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,11 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Stocker.Database;
-using FluentValidation.AspNetCore;
-using System.Reflection;
-using Autofac;
-using Mapping;
-using Stocker.Mapping;
 
 namespace Stocker
 {
@@ -54,17 +52,14 @@ namespace Stocker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
             app.UseSerilogRequestLogging();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

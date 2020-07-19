@@ -36,9 +36,9 @@ namespace Stocker.Mapping
 
     public class TransactionDbToApiMap : IMap<StockTransaction, Transaction>
     {
-        private readonly IMap<Database.Models.Amount, Models.Api.Amount> _amountMapper;
+        private readonly IMap<Database.Models.Amount, Amount> _amountMapper;
 
-        public TransactionDbToApiMap(IMap<Database.Models.Amount, Models.Api.Amount> amountMapper)
+        public TransactionDbToApiMap(IMap<Database.Models.Amount, Amount> amountMapper)
         {
             _amountMapper = amountMapper;
         }
@@ -47,7 +47,7 @@ namespace Stocker.Mapping
         {
             return new Transaction
             {
-                CommissionUser = new Models.Api.Amount
+                CommissionUser = new Amount
                 {
                     CurrencyCode = source.UserCurrency.Code,
                     ValueMinor = source.Commission.ValueMinor / source.ConversionRateUserToStock,
@@ -57,7 +57,7 @@ namespace Stocker.Mapping
                 Date = source.Date,
                 LoggedAt = DateTimeOffset.Now,
                 PricePerUnit = _amountMapper.Map(source.PricePerUnit),
-                PricePerUnitUser = new Models.Api.Amount
+                PricePerUnitUser = new Amount
                 {
                     CurrencyCode = source.UserCurrency.Code,
                     ValueMinor = source.PricePerUnit.ValueMinor / source.ConversionRateUserToStock,

@@ -1,5 +1,3 @@
-using System;
-
 namespace Stocker.Models.Api
 {
     public class GetStocksFilter
