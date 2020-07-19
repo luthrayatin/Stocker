@@ -16,7 +16,7 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Stocker/Dockerfile'
   tag: '$(Build.BuildId)'
   azureSubscription: 'Free Trial(9fd0221c-2d3b-419f-be77-cb81b9bc68e2)'
-  appName: 'stocker'
+  appName: 'stocker-test'
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
