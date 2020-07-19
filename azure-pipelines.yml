@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'f340ba24-2138-4169-b1bb-5bd9a980c698'
   imageRepository: 'investmentmanager'
   containerRegistry: 'investmentmanager.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/Stocker/Dockerfile'
   tag: '$(Build.BuildId)'
   azureSubscription: 'Free Trial(9fd0221c-2d3b-419f-be77-cb81b9bc68e2)'
   appName: 'stocker'
