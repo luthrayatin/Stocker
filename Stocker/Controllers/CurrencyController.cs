@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapping;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Stocker.Database;
 using Stocker.Models.Api;
@@ -22,12 +23,14 @@ namespace Stocker.Controllers
 
         public CurrencyController(ILogger<CurrencyController> logger, StockerDbContext dbContext,
             IMap<Currency, Models.Api.Currency> currencyDbToApiMapper,
-            IMap<AddCurrencyRequest, Currency> currencyAddRequestToDbMapper)
+            IMap<AddCurrencyRequest, Currency> currencyAddRequestToDbMapper,
+            IConfiguration configuration)
         {
             _logger = logger;
             _dbContext = dbContext;
             _currencyDbToApiMapper = currencyDbToApiMapper;
             _currencyAddRequestToDbMapper = currencyAddRequestToDbMapper;
+            _logger.LogInformation("Using DB Connection String as: {ConnectionString}", configuration.GetConnectionString("StockerDb"));
         }
 
         /// <summary>
