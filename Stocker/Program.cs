@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Stocker.Database;
+using Stocker.Extensions;
 
 namespace Stocker
 {
@@ -21,7 +23,7 @@ namespace Stocker
             try
             {
                 Log.Information("Starting the application...");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().MigrateDatabase<StockerDbContext>().Run();
             }
             catch (Exception e)
             {
