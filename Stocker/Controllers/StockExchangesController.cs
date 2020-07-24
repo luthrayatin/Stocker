@@ -53,8 +53,8 @@ namespace Stocker.Controllers
         public async Task<IActionResult> Add([FromBody] AddStockExchangeRequest request)
         {
             var stockExchangeExists = _dbContext.StockExchanges
-                .Any(se => se.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase) &&
-                           se.Country.Equals(request.Country, StringComparison.CurrentCultureIgnoreCase));
+                .Any(se => string.Equals(se.Name, request.Name, StringComparison.CurrentCultureIgnoreCase) &&
+                           string.Equals(se.Country, request.Country, StringComparison.CurrentCultureIgnoreCase));
 
             if (stockExchangeExists) return BadRequest($"StockExchange with Name: \"{request.Name}\" already exists.");
 
@@ -62,7 +62,7 @@ namespace Stocker.Controllers
             if (currency == null) return BadRequest($"The CurrencyId: {request.CurrencyId} is invalid.");
 
             var stockExchange = _stockExchangeAddRequestToDbMapper.Map(request);
-            _dbContext.StockExchanges.Add(stockExchange);
+            await _dbContext.StockExchanges.AddAsync(stockExchange);
             await _dbContext.SaveChangesAsync();
             return Ok(new {stockExchange.Id});
         }

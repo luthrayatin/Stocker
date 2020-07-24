@@ -39,17 +39,17 @@ namespace Stocker.Controllers
         /// <param name="filter">Specify Code and/or Name of currencies to fetch</param>
         /// <returns>Collection of currencies filtered by input.</returns>
         [HttpGet]
-        public IEnumerable<Models.Api.Currency> Get([FromRoute] GetCurrencyFilter filter)
+        public IEnumerable<Models.Api.Currency> Get(GetCurrencyFilter filter)
         {
             var resultQuery = _dbContext.Currencies.Select(c => c);
 
             if (!string.IsNullOrWhiteSpace(filter?.Code))
                 resultQuery = resultQuery.Where(c =>
-                    c.Code.Equals(filter.Code, StringComparison.CurrentCultureIgnoreCase));
+                    string.Equals(c.Code, filter.Code, StringComparison.CurrentCultureIgnoreCase));
 
             if (!string.IsNullOrWhiteSpace(filter?.Name))
                 resultQuery = resultQuery.Where(c =>
-                    c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase));
+                    string.Equals(c.Name, filter.Name, StringComparison.CurrentCultureIgnoreCase));
 
             foreach (var currency in resultQuery) yield return _currencyDbToApiMapper.Map(currency);
         }
