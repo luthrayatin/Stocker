@@ -15,7 +15,7 @@ variables:
   containerRegistry: 'investmentmanager.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Stocker/Dockerfile'
   tag: '$(Build.BuildId)'
-  azureSubscription: 'Free Trial(9fd0221c-2d3b-419f-be77-cb81b9bc68e2)'
+  azureSubscription: 'Visual Studio Professional Subscription(265f76df-85de-475c-a5d4-ee19c91722fa)'
   appName: 'stocker-test'
   
   # Agent VM image name
