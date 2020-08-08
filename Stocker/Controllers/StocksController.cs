@@ -32,16 +32,20 @@ namespace Stocker.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.Api.Stock> Get([FromRoute] GetStocksFilter filter)
+        public IEnumerable<Models.Api.Stock> Get([FromQuery] GetStocksFilter filter)
         {
             var resultQuery = _dbContext.Stocks.Select(s => s);
             if (!string.IsNullOrWhiteSpace(filter?.Name))
-                resultQuery = resultQuery.Where(s =>
-                    s.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase));
+            {
+                var lowerCaseFilterNameValue = filter.Name.ToLower();
+                resultQuery = resultQuery.Where(s => s.Name.ToLower() == lowerCaseFilterNameValue);
+            }
 
             if (!string.IsNullOrWhiteSpace(filter?.Ticker))
-                resultQuery = resultQuery.Where(s =>
-                    s.Ticker.Equals(filter.Ticker, StringComparison.CurrentCultureIgnoreCase));
+            {
+                var lowerCaseFilterTickerValue = filter.Ticker.ToLower();
+                resultQuery = resultQuery.Where(s => s.Ticker.ToLower() == lowerCaseFilterTickerValue);
+            }
 
             foreach (var stock in resultQuery) yield return _stockDbToApiMapper.Map(stock);
         }
@@ -49,6 +53,8 @@ namespace Stocker.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] AddStockRequest request)
         {
+            var lowerCaseName = request.Name.ToLower();
+            var lowerCaseTicker = request.Ticker.ToLower();
             if (_dbContext.Stocks.Any(s => (s.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase) ||
                                             s.Ticker.Equals(request.Ticker,
                                                 StringComparison.CurrentCultureIgnoreCase)) &&

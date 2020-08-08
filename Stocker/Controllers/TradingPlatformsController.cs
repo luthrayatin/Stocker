@@ -35,7 +35,7 @@ namespace Stocker.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.Api.TradingPlatform> Get([FromRoute] GetTradingPlatformsFilter filter)
+        public IEnumerable<Models.Api.TradingPlatform> Get([FromQuery] GetTradingPlatformsFilter filter)
         {
             var resultQuery = _dbContext.TradingPlatforms.Select(tp => tp);
 

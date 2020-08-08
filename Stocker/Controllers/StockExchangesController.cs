@@ -34,7 +34,7 @@ namespace Stocker.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.Api.StockExchange> Get([FromRoute] GetStockExchangesFilter filter)
+        public IEnumerable<Models.Api.StockExchange> Get([FromQuery] GetStockExchangesFilter filter)
         {
             var resultQuery = _dbContext.StockExchanges.Select(se => se);
 
@@ -52,9 +52,11 @@ namespace Stocker.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] AddStockExchangeRequest request)
         {
+            var lowerCaseName = request.Name.ToLower();
+            var lowerCaseCountry = request.Country.ToLower();
             var stockExchangeExists = _dbContext.StockExchanges
-                .Any(se => string.Equals(se.Name, request.Name, StringComparison.CurrentCultureIgnoreCase) &&
-                           string.Equals(se.Country, request.Country, StringComparison.CurrentCultureIgnoreCase));
+                .Any(se => se.Name.ToLower() == lowerCaseName &&
+                           se.Country.ToLower() == lowerCaseCountry);
 
             if (stockExchangeExists) return BadRequest($"StockExchange with Name: \"{request.Name}\" already exists.");
 

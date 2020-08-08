@@ -39,7 +39,7 @@ namespace Stocker.Controllers
         /// <param name="filter">Specify Code and/or Name of currencies to fetch</param>
         /// <returns>Collection of currencies filtered by input.</returns>
         [HttpGet]
-        public IEnumerable<Models.Api.Currency> Get(GetCurrencyFilter filter)
+        public IEnumerable<Models.Api.Currency> Get([FromQuery] GetCurrencyFilter filter)
         {
             var resultQuery = _dbContext.Currencies.Select(c => c);
 
